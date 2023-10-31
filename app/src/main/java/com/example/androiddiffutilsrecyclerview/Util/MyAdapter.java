@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.androiddiffutilsrecyclerview.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
@@ -21,7 +22,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         this.dataSource = dataSource;
     }
 
-    public  void insertData(List<String> insertList)
+    public  void insertDataToBack(List<String> insertList)
     {
         /*
         This function will add new data to RecyclerView
@@ -30,6 +31,18 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffUtilCallback);
 
         dataSource.addAll(insertList);
+        diffResult.dispatchUpdatesTo(this);
+    }
+
+    public  void insertDataToFront(List<String> insertList){
+        List<String> newList = new ArrayList<>(insertList); // Create a new list with the data to be inserted
+        newList.addAll(dataSource); // Add the existing data source after the new data
+
+        MyDiffUtilCallback diffUtilCallback = new MyDiffUtilCallback(dataSource, newList);
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffUtilCallback);
+
+        dataSource.clear(); // Clear the existing data
+        dataSource.addAll(newList); // Set the data source to the updated list
         diffResult.dispatchUpdatesTo(this);
     }
 
